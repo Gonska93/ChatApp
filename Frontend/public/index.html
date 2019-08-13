@@ -8,27 +8,24 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <main>
+	 <main>
       <header>
         <div class="user-count">0</div>
         <h1>Tokyo Chat</h1>
       </header>
 
       <section class="chat">
-        <p><strong>Pepito</strong>: Hey everyone!</p>
-        <p><strong>親日</strong>: こんいちは！</p>
+		 <ul id="messagesList"></ul>
       </section>
 
-      <form>
-        <input type="text" placeholder="Say something nice" />
-        <button>Send</button>
-      </form>
+	  <div class="inputContainer">
+		<input type="text" id="messageInput" placeholder="Say something nice" />
+        <button type="button" id="sendButton" />Send Message</button>
+      </div>
     </main>
-
-    <!-- Include jquery, cookies, socket.io (client-side) and your own code -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-    <script src="https://unpkg.com/cookie_js@1.2.2/cookie.min.js"></script>
-    <script src="https://unpkg.com/socket.io-client@2/dist/socket.io.slim.js"></script>
-    <script src="main.js"></script>
+	
+	<script type="application/javascript" src="/lib/signalr/dist/browser/signalr.js"></script>
+	<script type="application/javascript" src="main.js"></script>
+	<script type="application/javascript" src="/js/chat.js"></script>
   </body>
 </html>
