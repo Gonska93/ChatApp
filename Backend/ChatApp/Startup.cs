@@ -20,7 +20,6 @@ namespace ChatApp
             Configuration = configuration;
         }
 
-        readonly string _corsPolicy = "AllowAll";
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -34,14 +33,7 @@ namespace ChatApp
             });
 
 
-            services.AddCors(builder =>
-            {
-                builder.AddPolicy(_corsPolicy, options =>
-                {
-                    options.AllowAnyMethod()
-                            .AllowAnyOrigin();
-                });
-            });
+            services.AddCors();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
