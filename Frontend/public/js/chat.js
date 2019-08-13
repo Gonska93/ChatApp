@@ -5,6 +5,10 @@ var connection = new signalR.HubConnectionBuilder().withUrl("https://localhost:5
 //Disable send button until connection is established
 document.getElementById("sendButton").disabled = true;
 
+connection.on("Counter", function (count) {
+	document.getElementById("userCounter").innerText = count;
+});
+
 connection.on("ReceiveMessage", function (user, message) {
     var msg = message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
     var encodedMsg = user + " says " + msg;
@@ -15,6 +19,7 @@ connection.on("ReceiveMessage", function (user, message) {
 
 connection.start().then(function () {
     document.getElementById("sendButton").disabled = false;
+
 }).catch(function (err) {
     return console.error(err.toString());
 });
