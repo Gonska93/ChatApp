@@ -10,6 +10,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ChatApp.Hubs;
+using ChatApp.Data;
+using Microsoft.EntityFrameworkCore;
+using Swashbuckle.AspNetCore.Swagger;
+using ChatApp.Services;
+using ChatApp.Models;
 
 namespace ChatApp
 {
@@ -32,12 +37,25 @@ namespace ChatApp
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            // Database connection configuration
+            services.AddDbContext<ApplicationDbContext>(options => {
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+            });
+
+            // Register dependency injection
+            services.AddScoped<IIdentityService, IdentityService>();
 
             services.AddCors();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddSignalR();
+
+            // Swagger API documentation service registration
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info { Title = "ChatApp API", Version = "v1" });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -63,13 +81,20 @@ namespace ChatApp
                             .SetIsOriginAllowed((host) => true)
                             .AllowCredentials()
                         );
-
+            app.UseAuthentication();
             app.UseSignalR(routes =>
             {
                 routes.MapHub<ChatHub>("/chatHub");
             });
 
             app.UseMvc();
+
+            // Swagger Api documentation
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Shelter Api V1");
+            });
         }
     }
 }
