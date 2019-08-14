@@ -45,6 +45,8 @@ namespace ChatApp
             // Register dependency injection
             services.AddScoped<IIdentityService, IdentityService>();
 
+            services.AddCors();
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddSignalR();
@@ -73,8 +75,13 @@ namespace ChatApp
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
+            app.UseCors(builder => builder
+                            .AllowAnyHeader()
+                            .AllowAnyMethod()
+                            .SetIsOriginAllowed((host) => true)
+                            .AllowCredentials()
+                        );
             app.UseAuthentication();
-
             app.UseSignalR(routes =>
             {
                 routes.MapHub<ChatHub>("/chatHub");
